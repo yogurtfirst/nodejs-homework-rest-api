@@ -6,6 +6,8 @@ exports.register = catchAsync(async (req, res) => {
     const newUserData = req.body
   
     const newUser = await User.create(newUserData)
+
+    newUser.password = undefined
   
     const token = signToken(newUser.id)
 
