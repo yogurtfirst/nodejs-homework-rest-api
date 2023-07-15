@@ -1,27 +1,23 @@
 const express = require('express')
-const {listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-  updateStatusContact,
-} = require('../../controllers/contactControllers')
-const {checkContactById, checkCreateContactData} = require('../../middlewares/contactMiddlewares')
+const contactControllers = require('../../controllers/contacts')
+const contactMiddlewares = require('../../middlewares/contacts')
+const userMiddlewares = require('../../middlewares/users')
 
-const router = express.Router()
+const contactsRouter = express.Router()
 
-router
+contactsRouter.use('/', userMiddlewares.checkAccess)
+contactsRouter
   .route('/')
-  .get(listContacts)
-  .post(checkCreateContactData, addContact)
+  .get(contactControllers.listContacts)
+  .post(contactMiddlewares.checkCreateContactData, contactControllers.addContact)
 
-router.use('/:contactId', checkContactById);
-router
+contactsRouter.use('/:contactId', contactMiddlewares.checkContactById)
+contactsRouter
   .route('/:contactId')
-  .get(getContactById)
-  .put(updateContact)
-  .delete(removeContact)
+  .get(contactControllers.getContactById)
+  .put(contactControllers.updateContact)
+  .delete(contactControllers.removeContact)
 
-router.patch('/:contactId/favorite', updateStatusContact)
+contactsRouter.patch('/:contactId/favorite', contactControllers.updateStatusContact)
 
-module.exports = router
+module.exports = contactsRouter
