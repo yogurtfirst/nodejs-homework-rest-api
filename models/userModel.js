@@ -27,6 +27,14 @@ const userSchema = Schema({
     },
     avatarURL: {
       type: String,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      select: false,
     }
   },
   {
@@ -37,9 +45,11 @@ const userSchema = Schema({
 
 userSchema.pre('save', async function(next) {
   if (this.isNew) {
-    const emailHash = crypto.createHash('md5').update(this.email).digest('hex');
+    const emailHash = crypto.createHash('md5').update(this.email).digest('hex')
 
-    this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=monsterid`;
+    this.avatarURL = `https://www.gravatar.com/avatar/${emailHash}.jpg?d=monsterid`
+
+    this.verificationToken = crypto.randomBytes(32).toString('hex')
   }
 
   if (!this.isModified('password')) return next()

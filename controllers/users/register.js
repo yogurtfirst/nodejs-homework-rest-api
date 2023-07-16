@@ -1,20 +1,25 @@
 const { User } = require('../../models')
-const { updateUserToken } = require('../../services/users')
-const { catchAsync, signToken } = require('../../utils')
+const { Email } = require('../../services/users')
+const { catchAsync } = require('../../utils')
 
 exports.register = catchAsync(async (req, res) => {
     const newUserData = req.body
   
     const newUser = await User.create(newUserData)
 
-    newUser.password = undefined
-  
-    const token = signToken(newUser.id)
+    const verificationURL = `${req.protocol}://${req.get('host')}/api/users/verify/${newUser.verificationToken}`
 
-    updateUserToken(newUser.id, token)
-    
+    newUser.password = undefined
+    newUser.verificationToken = undefined
+
+    try {
+      await new Email(newUser, verificationURL).sendVerifyMail();
+    } catch (err) {
+      console.log(err);
+    }
+  
     res.status(201).json({
       user: newUser,
-      token,
+      verificationURL,
     })
 })

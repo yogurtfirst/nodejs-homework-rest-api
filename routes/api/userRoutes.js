@@ -9,5 +9,7 @@ usersRouter.post('/login', userController.login)
 usersRouter.post('/logout', userMiddleware.checkAccess, userController.logout)
 usersRouter.get('/current', userMiddleware.checkAccess, userController.getCurrent)
 usersRouter.patch('/avatars', userMiddleware.checkAccess, userMiddleware.uploadUserAvatar, userController.updateAvatar)
+usersRouter.get('/verify/:verificationToken', userController.verifyUser)
+usersRouter.post('/verify', userController.resendVerificationMail)
 
 module.exports = usersRouter
