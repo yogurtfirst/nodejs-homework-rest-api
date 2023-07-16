@@ -8,5 +8,6 @@ usersRouter.post('/register', userMiddleware.checkRegisterUserData, userControll
 usersRouter.post('/login', userController.login)
 usersRouter.post('/logout', userMiddleware.checkAccess, userController.logout)
 usersRouter.get('/current', userMiddleware.checkAccess, userController.getCurrent)
+usersRouter.patch('/avatars', userMiddleware.checkAccess, userMiddleware.uploadUserAvatar, userController.updateAvatar)
 
 module.exports = usersRouter
