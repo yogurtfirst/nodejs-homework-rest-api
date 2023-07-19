@@ -1,5 +1,4 @@
 const { AppError, catchAsync, signToken } = require('../../utils')
-// const { authUser } = require('../../services/users/authUser')
 const { User } = require('../../models')
 const { updateUserToken } = require('../../services/users')
 
@@ -13,6 +12,8 @@ exports.login = catchAsync(async (req, res) => {
     const passwordIsValid = await user.checkPassword(password, user.password)
   
     if (!passwordIsValid) throw new AppError(401, 'Not authorized!')
+
+     if (!user.verify) throw new AppError(401, 'Email is not verified!')
   
     user.password = undefined
   

@@ -1,0 +1,15 @@
+extends layouts/base
+
+block content
+  p Hi new User!
+  p For getting started work with my APIs you need to go by the link bellow to verify your user email address!
+  table.btn.btn-primary(role="presentation", border="0", cellpadding="0", cellspacing="0")
+    tbody
+      tr
+        td(align="left")
+          table(role="presentation", border="0", cellpadding="0", cellspacing="0")
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target="_blank") Call To Action
+  p This email is generated automatically and you don't need to reply on it.
